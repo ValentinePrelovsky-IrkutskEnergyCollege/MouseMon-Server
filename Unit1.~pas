@@ -17,8 +17,9 @@ type
     procedure IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
     procedure IdTCPServer1readPcNameCommand(ASender: TIdCommand);
     procedure Button1Click(Sender: TObject);
-    procedure IdTCPServer1Execute(AThread: TIdPeerThread);
     procedure IdTCPServer1get_ipCommand(ASender: TIdCommand);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -63,31 +64,23 @@ begin
   Form1.Memo1.Lines.Clear;
 end;
 
-procedure TForm1.IdTCPServer1Execute(AThread: TIdPeerThread);
-var
-  strText: String;
-begin
-  {
-  //????????? ?? ??????? ??????
-  strText := AContext.Connection.Socket.ReadLn;
-  //????????
-  AContext.Connection.Socket.WriteLn('Took the line: ' + strText);
-  //??????? ???????? ?? ????? ??????? (?????? ?????????????,
-  //??????? ?????????? ?????????????
-  section.Enter;
-    Inc(processed, 1);
-    txtCount.Text := IntToStr(processed);
-    txtFrom.Text := AContext.Connection.Socket.Binding.PeerIP;
-  section.Leave;
-  //????????? ?????????? ? ?????????????
-  AContext.Connection.Disconnect;
-  }
-end;
+
 
 procedure TForm1.IdTCPServer1get_ipCommand(ASender: TIdCommand);
 begin
-  Memo1.Lines.Add('get ip command: ' + ASender.Thread.Connection.Socket.Binding.PeerIP);
+  Memo1.Lines.Add('binding peer ip: ' + ASender.Thread.Connection.Socket.Binding.PeerIP);
   Asender.Thread.Connection.WriteLn(ASender.Thread.Connection.Socket.Binding.PeerIP);
+  ShowMessage(ASender.Thread.Connection.Socket.Binding.IP);
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  IdTCPServer1.Active:=true;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  IdTCPServer1.Active:=false;
 end;
 
 end.

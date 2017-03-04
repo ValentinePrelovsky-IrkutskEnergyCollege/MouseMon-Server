@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -31,6 +32,15 @@ object Form1: TForm1
     Lines.Strings = (
       'Memo1')
     TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 40
+    Top = 264
+    Width = 217
+    Height = 57
+    Caption = 'msg date'
+    TabOrder = 2
+    OnClick = Button2Click
   end
   object IdTCPServer1: TIdTCPServer
     Active = True
