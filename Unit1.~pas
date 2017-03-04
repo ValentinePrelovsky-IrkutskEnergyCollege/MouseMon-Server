@@ -38,6 +38,12 @@ var
 implementation
 
 {$R *.dfm}
+function getConnectionInfo(ASender: TIdCommand):string;
+begin
+
+  Result := ' ' +  ASender.Thread.Connection.Socket.Binding.IP + ' - ' +
+  IntToStr(ASender.Thread.Connection.Socket.Binding.Port);
+end;
 function dtstamp():string;
 begin
   Result := DateToStr(Date()) + ' - ' + TimeToStr(Now());
@@ -54,17 +60,18 @@ end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('tested');
+  log('tested' + getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('m_ejct');
+  log('m_ejct' + getConnectionInfo(ASender));
+
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
-  log('mouse inject');
+  log('mouse inject' + getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);

@@ -14,6 +14,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Label1: TLabel;
+    Button4: TButton;
     procedure IdTCPServer1Connect(AThread: TIdPeerThread);
     procedure IdTCPServer1testCommand(ASender: TIdCommand);
     procedure IdTCPServer1mouseejectCommand(ASender: TIdCommand);
@@ -26,6 +27,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure IdTCPServer1Execute(AThread: TIdPeerThread);
+    procedure Button4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -97,6 +99,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   IdTCPServer1.Active:=true;
+  
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -127,6 +130,11 @@ begin
       // do yet something else ...
     end;
   end;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+  ShowMessage('it does nothing yet');
 end;
 
 end.
