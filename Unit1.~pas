@@ -11,6 +11,7 @@ type
     Button1: TButton;
     IdTCPServer1: TIdTCPServer;
     Memo1: TMemo;
+    Button2: TButton;
     procedure IdTCPServer1Connect(AThread: TIdPeerThread);
     procedure IdTCPServer1testCommand(ASender: TIdCommand);
     procedure IdTCPServer1mouseejectCommand(ASender: TIdCommand);
@@ -20,6 +21,7 @@ type
     procedure IdTCPServer1get_ipCommand(ASender: TIdCommand);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -32,6 +34,7 @@ var
 implementation
 
 {$R *.dfm}
+procedure log(stringLog:string);begin Form1.Memo1.Lines.Add(stringLog);end;
 
 procedure TForm1.IdTCPServer1Connect(AThread: TIdPeerThread);
 begin
@@ -40,22 +43,22 @@ end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  Form1.Memo1.Lines.Add('tested');
+  log('tested');
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  Form1.Memo1.Lines.Add('m_ejct');
+  log('m_ejct');
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
-  Form1.Memo1.Lines.Add('mouse inject');
+  log('mouse inject');
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
 begin
-  Form1.Memo1.Lines.Add('read pc name: ' + 'server name is ' + idTCPServer1.LocalName);
+  log('read pc name: ' + 'server name is ' + idTCPServer1.LocalName);
   ASender.Thread.Connection.WriteLn('server name is ' + idTCPServer1.LocalName);
 end;
 
@@ -68,9 +71,9 @@ end;
 
 procedure TForm1.IdTCPServer1get_ipCommand(ASender: TIdCommand);
 begin
-  Memo1.Lines.Add('binding peer ip: ' + ASender.Thread.Connection.Socket.Binding.PeerIP);
+  log('binding peer ip: ' + ASender.Thread.Connection.Socket.Binding.PeerIP);
   Asender.Thread.Connection.WriteLn(ASender.Thread.Connection.Socket.Binding.PeerIP);
-  ShowMessage(ASender.Thread.Connection.Socket.Binding.IP);
+  //ShowMessage(ASender.Thread.Connection.Socket.Binding.IP);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -81,6 +84,11 @@ end;
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   IdTCPServer1.Active:=false;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  ShowMessage(DateToStr(Date()) + ' - ' + TimeToStr(Now()));
 end;
 
 end.

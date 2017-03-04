@@ -15,6 +15,19 @@ object Form1: TForm1
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
+  object Label1: TLabel
+    Left = 24
+    Top = 96
+    Width = 159
+    Height = 24
+    Caption = #1046#1091#1088#1085#1072#1083' '#1076#1077#1081#1089#1090#1074#1080#1081
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
   object Button1: TButton
     Left = 24
     Top = 24
@@ -26,11 +39,12 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 24
-    Top = 104
-    Width = 257
+    Top = 128
+    Width = 561
     Height = 129
     Lines.Strings = (
       'Memo1')
+    ScrollBars = ssVertical
     TabOrder = 1
   end
   object Button2: TButton
@@ -41,6 +55,15 @@ object Form1: TForm1
     Caption = 'msg date'
     TabOrder = 2
     OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 208
+    Top = 24
+    Width = 65
+    Height = 57
+    Caption = 'disconnect'
+    TabOrder = 3
+    OnClick = Button3Click
   end
   object IdTCPServer1: TIdTCPServer
     Active = True
