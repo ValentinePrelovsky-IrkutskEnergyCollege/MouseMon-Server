@@ -12,6 +12,8 @@ type
     IdTCPServer1: TIdTCPServer;
     Memo1: TMemo;
     Button2: TButton;
+    Button3: TButton;
+    Label1: TLabel;
     procedure IdTCPServer1Connect(AThread: TIdPeerThread);
     procedure IdTCPServer1testCommand(ASender: TIdCommand);
     procedure IdTCPServer1mouseejectCommand(ASender: TIdCommand);
@@ -22,6 +24,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure IdTCPServer1Execute(AThread: TIdPeerThread);
   private
     { Private declarations }
   public
@@ -34,7 +38,14 @@ var
 implementation
 
 {$R *.dfm}
-procedure log(stringLog:string);begin Form1.Memo1.Lines.Add(stringLog);end;
+function dtstamp():string;
+begin
+  Result := DateToStr(Date()) + ' - ' + TimeToStr(Now());
+end;
+procedure log(stringLog:string);
+begin
+  Form1.Memo1.Lines.Add(stringLog + ': ' + dtstamp());
+end;
 
 procedure TForm1.IdTCPServer1Connect(AThread: TIdPeerThread);
 begin
@@ -89,6 +100,26 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   ShowMessage(DateToStr(Date()) + ' - ' + TimeToStr(Now()));
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  IdTCPServer1.Active:=false;
+end;
+
+procedure TForm1.IdTCPServer1Execute(AThread: TIdPeerThread);
+begin
+  case AThread.Connection.Socket.Binding.Port of
+    6000: begin
+      log('execute: port 6000');
+    end;
+    2001: begin
+      // do something else...
+    end;
+    2002: begin
+      // do yet something else ...
+    end;
+  end;
 end;
 
 end.

@@ -25,6 +25,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure IdTCPServer1Execute(AThread: TIdPeerThread);
   private
     { Private declarations }
   public
@@ -37,6 +38,12 @@ var
 implementation
 
 {$R *.dfm}
+function getConnectionInfo(ASender: TIdCommand):string;
+begin
+
+  Result := ' ' +  ASender.Thread.Connection.Socket.Binding.IP + ' - ' +
+  IntToStr(ASender.Thread.Connection.Socket.Binding.Port);
+end;
 function dtstamp():string;
 begin
   Result := DateToStr(Date()) + ' - ' + TimeToStr(Now());
@@ -53,17 +60,18 @@ end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('tested');
+  log('tested' + getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('m_ejct');
+  log('m_ejct' + getConnectionInfo(ASender));
+
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
-  log('mouse inject');
+  log('mouse inject' + getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
@@ -104,6 +112,21 @@ end;
 procedure TForm1.Button3Click(Sender: TObject);
 begin
   IdTCPServer1.Active:=false;
+end;
+
+procedure TForm1.IdTCPServer1Execute(AThread: TIdPeerThread);
+begin
+  case AThread.Connection.Socket.Binding.Port of
+    6000: begin
+      log('execute: port 6000');
+    end;
+    2001: begin
+      // do something else...
+    end;
+    2002: begin
+      // do yet something else ...
+    end;
+  end;
 end;
 
 end.

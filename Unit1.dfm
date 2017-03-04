@@ -141,6 +141,7 @@ object Form1: TForm1
     MaxConnectionReply.NumericCode = 0
     MaxConnections = 5
     OnConnect = IdTCPServer1Connect
+    OnExecute = IdTCPServer1Execute
     ReplyExceptionCode = 0
     ReplyTexts = <>
     ReplyUnknownCommand.NumericCode = 404
