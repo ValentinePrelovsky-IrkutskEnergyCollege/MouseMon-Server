@@ -62,14 +62,11 @@ var ListItem:TListItem;
 begin
 try
     Form1.ListView1.Items.BeginUpdate;
-    //ListView1.Visible := false;
-    //while (not SQLQuery1.EOF) do begin
       //Code borrowed from @Serg
       ListItem:= Form1.ListView1.Items.Add;
       ListItem.Caption:= cmd;
       ListItem.SubItems.Add(res);
       ListItem.SubItems.Add(dtstamp());
-    //end; {while}
   finally
     Form1.ListView1.Items.EndUpdate;
   end;
@@ -77,29 +74,29 @@ end;
 
 procedure TForm1.IdTCPServer1Connect(AThread: TIdPeerThread);
 begin
-  Form1.Caption := 'connected';
+  Form1.Caption := 'Соединение установлено';
 end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('tested' , getConnectionInfo(ASender));
+  log('Соединение установлено' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('m_ejct' , getConnectionInfo(ASender));
+  log('Мышь извлечена' , getConnectionInfo(ASender));
 
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
-  log('mouse inject' , getConnectionInfo(ASender));
+  log('Вставлена мышь' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
 begin
-  log('read pc name: ' , 'server name is ' + idTCPServer1.LocalName);
-  ASender.Thread.Connection.WriteLn('server name is ' + idTCPServer1.LocalName);
+  log('read pc name: ' , 'Имя сервера ' + idTCPServer1.LocalName);
+  ASender.Thread.Connection.WriteLn('Имя сервера ' + idTCPServer1.LocalName);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);

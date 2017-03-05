@@ -5,18 +5,21 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, IdBaseComponent, IdComponent, IdTCPServer, StdCtrls,SyncObjs,
-  ComCtrls ;
+  ComCtrls, Menus ;
 
 type
   TForm1 = class(TForm)
-    Button1: TButton;
     IdTCPServer1: TIdTCPServer;
-    Memo1: TMemo;
-    Button2: TButton;
     Button3: TButton;
     Label1: TLabel;
-    Button4: TButton;
     ListView1: TListView;
+    Label2: TLabel;
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
     procedure IdTCPServer1Connect(AThread: TIdPeerThread);
     procedure IdTCPServer1testCommand(ASender: TIdCommand);
     procedure IdTCPServer1mouseejectCommand(ASender: TIdCommand);
@@ -29,7 +32,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure IdTCPServer1Execute(AThread: TIdPeerThread);
-    procedure Button4Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -101,7 +104,7 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  Form1.Memo1.Lines.Clear;
+  Form1.ListView1.Clear;
 end;
 
 
@@ -115,8 +118,9 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  Form1.Caption := 'СЕРВЕР';
+  Form1.Button3.Caption:='Активен';
   IdTCPServer1.Active:=true;
-  
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -128,11 +132,23 @@ procedure TForm1.Button2Click(Sender: TObject);
 begin
   ShowMessage(DateToStr(Date()) + ' - ' + TimeToStr(Now()));
 end;
-
+procedure setServerStatus(b:boolean);
+begin
+  Form1.IdTCPServer1.Active:=b;
+end;
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-  IdTCPServer1.Active:=false;
-end;
+ if (Form1.IdTCPServer1.Active = false)then
+  begin
+    Form1.IdTCPServer1.Active:=true;
+    Form1.Button3.Caption:='Активен';
+  end
+ else
+  begin
+    Form1.IdTCPServer1.Active:=false;
+    Form1.Button3.Caption:='Не активен';
+  end;
+end; // e if active
 
 procedure TForm1.IdTCPServer1Execute(AThread: TIdPeerThread);
 begin
@@ -149,10 +165,9 @@ begin
   end;
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TForm1.N5Click(Sender: TObject);
 begin
-//  ShowMessage('it does nothing yet');
-log('cmd','res');
+  Form1.ListView1.Clear;
 end;
 
 end.
