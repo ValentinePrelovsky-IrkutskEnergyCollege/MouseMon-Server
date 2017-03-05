@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, IdBaseComponent, IdComponent, IdTCPServer, StdCtrls,SyncObjs ;
+  Dialogs, IdBaseComponent, IdComponent, IdTCPServer, StdCtrls,SyncObjs,
+  ComCtrls ;
 
 type
   TForm1 = class(TForm)
@@ -14,6 +15,8 @@ type
     Button2: TButton;
     Button3: TButton;
     Label1: TLabel;
+    Button4: TButton;
+    ListView1: TListView;
     procedure IdTCPServer1Connect(AThread: TIdPeerThread);
     procedure IdTCPServer1testCommand(ASender: TIdCommand);
     procedure IdTCPServer1mouseejectCommand(ASender: TIdCommand);
@@ -26,6 +29,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure IdTCPServer1Execute(AThread: TIdPeerThread);
+    procedure Button4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -38,19 +42,34 @@ var
 implementation
 
 {$R *.dfm}
+
+function dtstamp():string;
+begin
+  Result := DateToStr(Date()) + ' - ' + TimeToStr(Now());
+end;
+
 function getConnectionInfo(ASender: TIdCommand):string;
 begin
 
   Result := ' ' +  ASender.Thread.Connection.Socket.Binding.IP + ' - ' +
   IntToStr(ASender.Thread.Connection.Socket.Binding.Port);
 end;
-function dtstamp():string;
+procedure log(cmd:string;res:string);
+var ListItem:TListItem;
 begin
-  Result := DateToStr(Date()) + ' - ' + TimeToStr(Now());
-end;
-procedure log(stringLog:string);
-begin
-  Form1.Memo1.Lines.Add(stringLog + ': ' + dtstamp());
+try
+    Form1.ListView1.Items.BeginUpdate;
+    //ListView1.Visible := false;
+    //while (not SQLQuery1.EOF) do begin
+      //Code borrowed from @Serg
+      ListItem:= Form1.ListView1.Items.Add;
+      ListItem.Caption:= cmd;
+      ListItem.SubItems.Add(res);
+      ListItem.SubItems.Add(dtstamp());
+    //end; {while}
+  finally
+    Form1.ListView1.Items.EndUpdate;
+  end;
 end;
 
 procedure TForm1.IdTCPServer1Connect(AThread: TIdPeerThread);
@@ -60,23 +79,23 @@ end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('tested' + getConnectionInfo(ASender));
+  log('tested' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('m_ejct' + getConnectionInfo(ASender));
+  log('m_ejct' , getConnectionInfo(ASender));
 
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
-  log('mouse inject' + getConnectionInfo(ASender));
+  log('mouse inject' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
 begin
-  log('read pc name: ' + 'server name is ' + idTCPServer1.LocalName);
+  log('read pc name: ' , 'server name is ' + idTCPServer1.LocalName);
   ASender.Thread.Connection.WriteLn('server name is ' + idTCPServer1.LocalName);
 end;
 
@@ -89,7 +108,7 @@ end;
 
 procedure TForm1.IdTCPServer1get_ipCommand(ASender: TIdCommand);
 begin
-  log('binding peer ip: ' + ASender.Thread.Connection.Socket.Binding.PeerIP);
+  log('binding peer ip: ' , ASender.Thread.Connection.Socket.Binding.PeerIP);
   Asender.Thread.Connection.WriteLn(ASender.Thread.Connection.Socket.Binding.PeerIP);
   //ShowMessage(ASender.Thread.Connection.Socket.Binding.IP);
 end;
@@ -97,6 +116,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   IdTCPServer1.Active:=true;
+  
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -118,7 +138,7 @@ procedure TForm1.IdTCPServer1Execute(AThread: TIdPeerThread);
 begin
   case AThread.Connection.Socket.Binding.Port of
     6000: begin
-      log('execute: port 6000');
+      log('execute: port 6000' , ' fault>');
     end;
     2001: begin
       // do something else...
@@ -127,6 +147,12 @@ begin
       // do yet something else ...
     end;
   end;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+//  ShowMessage('it does nothing yet');
+log('cmd','res');
 end;
 
 end.
