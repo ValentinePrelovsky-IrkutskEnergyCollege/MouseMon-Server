@@ -13,6 +13,7 @@ object Form1: TForm1
   Menu = MainMenu1
   OldCreateOrder = False
   OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -80,11 +81,7 @@ object Form1: TForm1
   end
   object IdTCPServer1: TIdTCPServer
     Active = True
-    Bindings = <
-      item
-        IP = '127.0.0.1'
-        Port = 6000
-      end>
+    Bindings = <>
     CommandHandlers = <
       item
         CmdDelimiter = ' '
@@ -151,8 +148,9 @@ object Form1: TForm1
     Greeting.Text.Strings = (
       'Connection grades')
     Greeting.TextCode = '200'
+    ListenQueue = 50
     MaxConnectionReply.NumericCode = 0
-    MaxConnections = 5
+    MaxConnections = 40
     OnConnect = IdTCPServer1Connect
     OnExecute = IdTCPServer1Execute
     ReplyExceptionCode = 0
@@ -169,6 +167,10 @@ object Form1: TForm1
     Top = 16
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
+      object SaveAs1: TMenuItem
+        Caption = 'SaveAs'
+        OnClick = SaveAs1Click
+      end
       object N4: TMenuItem
         Caption = #1042#1099#1093#1086#1076
       end
@@ -183,5 +185,15 @@ object Form1: TForm1
     object N3: TMenuItem
       Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
     end
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '.txt'
+    FileName = 'C:\Users\Valentin\Desktop\srv\'#1099'.exe'
+    Filter = 'Text|*.txt'
+    FilterIndex = 0
+    InitialDir = 'GetCurrentDir()'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofCreatePrompt, ofNoTestFileCreate, ofEnableSizing]
+    Left = 192
+    Top = 16
   end
 end
