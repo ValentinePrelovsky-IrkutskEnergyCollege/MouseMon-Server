@@ -58,9 +58,7 @@ end;
 
 function getConnectionInfo(ASender: TIdCommand):string;
 begin
-  // Form1.Caption:=  (ASender.Thread.Connection.Socket.SocksInfo.LocalName);
-  Result := ' ' +  ASender.Thread.Connection.Socket.Binding.PeerIP + ' - ' +
-  (ASender.Thread.Connection.LocalName);
+  Result := ASender.Thread.Connection.LocalName;
 end;
 procedure log(cmd:string;res:string);
 var ListItem:TListItem;
@@ -74,7 +72,7 @@ try
       ListItem.SubItems.Add(dtstamp());
   finally
     Form1.ListView1.Items.EndUpdate;
-    WriteLn(logFile,cmd,res,dtstamp());
+    WriteLn(logFile,cmd + ' - ',res + ' - ',dtstamp());
     Flush(logFile);
   end;
 end;
@@ -185,19 +183,25 @@ end;
 
 procedure TForm1.SaveAs1Click(Sender: TObject);
 var b:boolean; path:string;
+var Streaml, Stream2: TFileStream;
 begin
   b:=SaveDialog1.Execute;
   if (b = true) then
   begin
     path := Trim(SaveDialog1.FileName);
-    closeFile(logFile);
-    AssignFile(logFile,path);
-    Rewrite(logFile);
+    closeFile(logFile); // close log file temporarily
 
-//    if (ExtractFileExt(path) = '')then
- //   ShowMessage(path);
-
-    //ShowMessage(ExtractFileExt(path));
+    try
+      Streaml := TFileStream.Create('log.txt', fmOpenRead);
+      Stream2 := TFileStream.Create(path, fmCreate);
+      Stream2.Seek(0, soFromEnd); // set file position at the end of file
+      Stream2.CopyFrom(Streaml, Streaml.Size);
+    finally
+      Streaml.Free;
+      Stream2.Free;
+      AssignFile(logFile,'log.txt'); // open closed log (restore the closed log)
+      Append(logFile); // Open log file in appending file mode
+    end;
   end;// b = true
 end;
 
