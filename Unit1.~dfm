@@ -13,6 +13,7 @@ object Form1: TForm1
   Menu = MainMenu1
   OldCreateOrder = False
   OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -80,11 +81,7 @@ object Form1: TForm1
   end
   object IdTCPServer1: TIdTCPServer
     Active = True
-    Bindings = <
-      item
-        IP = '127.0.0.1'
-        Port = 6000
-      end>
+    Bindings = <>
     CommandHandlers = <
       item
         CmdDelimiter = ' '
@@ -145,14 +142,26 @@ object Form1: TForm1
         ReplyExceptionCode = 0
         ReplyNormal.NumericCode = 0
         Tag = 0
+      end
+      item
+        CmdDelimiter = ' '
+        Command = 'get_name'
+        Disconnect = False
+        Name = 'get_name'
+        OnCommand = IdTCPServer1get_nameCommand
+        ParamDelimiter = ' '
+        ReplyExceptionCode = 0
+        ReplyNormal.NumericCode = 0
+        Tag = 0
       end>
     DefaultPort = 6000
     Greeting.NumericCode = 200
     Greeting.Text.Strings = (
       'Connection grades')
     Greeting.TextCode = '200'
+    ListenQueue = 50
     MaxConnectionReply.NumericCode = 0
-    MaxConnections = 5
+    MaxConnections = 40
     OnConnect = IdTCPServer1Connect
     OnExecute = IdTCPServer1Execute
     ReplyExceptionCode = 0
@@ -169,8 +178,13 @@ object Form1: TForm1
     Top = 16
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
+      object SaveAs1: TMenuItem
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1082#1086#1087#1080#1102' '#1078#1091#1088#1085#1072#1083#1072' '#1082#1072#1082
+        OnClick = SaveAs1Click
+      end
       object N4: TMenuItem
         Caption = #1042#1099#1093#1086#1076
+        OnClick = N4Click
       end
     end
     object N2: TMenuItem
@@ -182,6 +196,28 @@ object Form1: TForm1
     end
     object N3: TMenuItem
       Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+      OnClick = N3Click
     end
+    object N6: TMenuItem
+      Caption = #1040#1074#1090#1086#1088
+      object N7: TMenuItem
+        Caption = #1040#1074#1090#1086#1088' '#1087#1088#1086#1075#1088#1072#1084#1084#1099
+        OnClick = N7Click
+      end
+      object N8: TMenuItem
+        Caption = #1057#1082#1086#1087#1080#1088#1086#1074#1072#1090#1100' '#1087#1086#1095#1090#1091' '#1072#1074#1090#1086#1088#1072' '#1074' '#1073#1091#1092#1077#1088' '#1086#1073#1084#1077#1085#1072
+        OnClick = N8Click
+      end
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '.txt'
+    FileName = 'C:\Users\Valentin\Desktop\srv\'#1099'.exe'
+    Filter = 'Text|*.txt'
+    FilterIndex = 0
+    InitialDir = 'GetCurrentDir()'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofCreatePrompt, ofNoTestFileCreate, ofEnableSizing]
+    Left = 192
+    Top = 16
   end
 end
