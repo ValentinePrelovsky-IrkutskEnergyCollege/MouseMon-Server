@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, IdBaseComponent, IdComponent, IdTCPServer, StdCtrls,SyncObjs,
-  ComCtrls, Menus ;
+  ComCtrls, Menus,Clipbrd ;
 
 type
   TForm1 = class(TForm)
@@ -22,6 +22,9 @@ type
     N5: TMenuItem;
     SaveAs1: TMenuItem;
     SaveDialog1: TSaveDialog;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
     procedure IdTCPServer1Connect(AThread: TIdPeerThread);
     procedure IdTCPServer1testCommand(ASender: TIdCommand);
     procedure IdTCPServer1mouseejectCommand(ASender: TIdCommand);
@@ -39,6 +42,8 @@ type
     procedure IdTCPServer1get_nameCommand(ASender: TIdCommand);
     procedure N3Click(Sender: TObject);
     procedure N4Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure N8Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -81,32 +86,32 @@ end;
 
 procedure TForm1.IdTCPServer1Connect(AThread: TIdPeerThread);
 begin
-  Form1.Caption := 'Connection established';
+  Form1.Caption := 'Соединение установлено';
 end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('Connection established' , getConnectionInfo(ASender));
+  log('Соединение установлено' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('mouse ejected' , getConnectionInfo(ASender));
+  log('Мышь извлечена' , getConnectionInfo(ASender));
 
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
   ASender.Thread.Connection.WriteLn(ASender.Thread.Connection.LocalName);
-  
-  log('Mouse inserted' , getConnectionInfo(ASender));
+
+  log('Мышь подключена' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
 begin
-  log('read pc name: ' , 'Server name: ' + idTCPServer1.LocalName);
+  log('Считать имя: ' , 'Имя сервера: ' + idTCPServer1.LocalName);
   log((ASender.Thread.Connection.Socket.Binding.IP) ,  ASender.Thread.Connection.Socket.Binding.PeerIP);
-  ASender.Thread.Connection.WriteLn('Server name: ' + idTCPServer1.LocalName);
+  ASender.Thread.Connection.WriteLn('Имя сервера: ' + idTCPServer1.LocalName);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -116,20 +121,20 @@ end;
 
 procedure TForm1.IdTCPServer1get_ipCommand(ASender: TIdCommand);
 begin
-  log('binding peer ip: ' , ASender.Thread.Connection.Socket.Binding.PeerIP);
+  log('Точечный адрес: ' , ASender.Thread.Connection.Socket.Binding.PeerIP);
   Asender.Thread.Connection.WriteLn(ASender.Thread.Connection.Socket.Binding.PeerIP);
   //ShowMessage(ASender.Thread.Connection.Socket.Binding.IP);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  Form1.Caption := 'Server';
-  Form1.Button3.Caption:='is active';
+  Form1.Caption := 'Сервер';
+  Form1.Button3.Caption:='Активен';
   IdTCPServer1.Active:=true;
   AssignFile(logFile,'log.txt');
   // if (FileExists('log.txt') = false)then  Rewrite(logFile) else Append(logFile);
   Rewrite(logFile);
-  log('Starting ','server ');
+  log('Запуск ','сервера ');
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -146,14 +151,14 @@ begin
  if (Form1.IdTCPServer1.Active = false)then
   begin
     Form1.IdTCPServer1.Active:=true;
-    Form1.Button3.Caption:='Is active';
-    log('Starting ','server ');
+    Form1.Button3.Caption:='Активен';
+    log('Запуск ','сервера ');
   end
  else
   begin
     Form1.IdTCPServer1.Active:=false;
-    Form1.Button3.Caption:='is not active';
-    log('Stopping ','server ');
+    Form1.Button3.Caption:='Не активен';
+    log('Остановка ','сервера ');
   end;
 end; // e if active
 
@@ -162,7 +167,7 @@ begin
   //ShowMessage(IntToStr(AThread.Connection.Socket.Binding.Port));
   case AThread.Connection.Socket.Binding.Port of
     6000: begin
-      log('execute: port 6000' , ' fault>');
+      log('Выполнение: port 6000' , ' Ошибка');
     end;
     2001: begin
       // do something else...
@@ -180,7 +185,7 @@ end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  log('Stopping ','server ');
+  log('Остановка ','сервера ');
   CloseFile(logFile);
 end;
 
@@ -218,20 +223,37 @@ procedure TForm1.IdTCPServer1get_nameCommand(ASender: TIdCommand);
 var loc:string;
 begin
   loc:=ASender.Thread.Connection.ReadLn();
-  ASender.Thread.Connection.WriteLn('i have read: ' + loc);
-  log('i have read: ' , loc);
+  ASender.Thread.Connection.WriteLn('Я прочёл: ' + loc);
+  log('Я прочёл: ' , loc);
 end;
 
 procedure TForm1.N3Click(Sender: TObject);
 begin
   ShowMessage('Данная программа-сервер связывается с классом клиентов'
   + ' и следит за событием отсоединения или присоединения мыши к'+
-  ' отслеживаемым ПК.');
+  ' отслеживаемым ПК.'+#10#13#10#13+
+  'Выводит событие (извлечена или присоединена мышь' + ' + имя ПК в сети,'+
+  ' у которого возникло событие'+#10#13+'Время выводится сервера, а не клиента');
 end;
 
 procedure TForm1.N4Click(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TForm1.N7Click(Sender: TObject);
+begin
+  ShowMessage('Автор программы: Преловский Валентин' + #10#13 +  #10#13+
+  'Право изменения программы, исходного кода оставляю за собой.'+#10#13+#10#13+
+  'Имеющиеся пожелания и жалобы касательно работы' +' данного программного'+
+  ' обеспечения вы можете отправить на электронную почту: ' +
+  'prelovskyvalentine@gmail.com' + #10#13#10#13#10#13+
+  #9#9#9#9 + '(с) Преловский Валентин, 2017');
+end;
+
+procedure TForm1.N8Click(Sender: TObject);
+begin
+  Clipboard.SetTextBuf('prelovskyvalentine@gmail.com');
 end;
 
 end.

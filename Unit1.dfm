@@ -179,7 +179,7 @@ object Form1: TForm1
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
       object SaveAs1: TMenuItem
-        Caption = 'SaveAs'
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1078#1091#1088#1085#1072#1083' '#1082#1072#1082
         OnClick = SaveAs1Click
       end
       object N4: TMenuItem
@@ -197,6 +197,17 @@ object Form1: TForm1
     object N3: TMenuItem
       Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
       OnClick = N3Click
+    end
+    object N6: TMenuItem
+      Caption = #1040#1074#1090#1086#1088
+      object N7: TMenuItem
+        Caption = #1040#1074#1090#1086#1088' '#1087#1088#1086#1075#1088#1072#1084#1084#1099
+        OnClick = N7Click
+      end
+      object N8: TMenuItem
+        Caption = #1057#1082#1086#1087#1080#1088#1086#1074#1072#1090#1100' '#1087#1086#1095#1090#1091' '#1072#1074#1090#1086#1088#1072' '#1074' '#1073#1091#1092#1077#1088' '#1086#1073#1084#1077#1085#1072
+        OnClick = N8Click
+      end
     end
   end
   object SaveDialog1: TSaveDialog
