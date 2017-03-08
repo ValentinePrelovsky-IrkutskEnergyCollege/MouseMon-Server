@@ -37,6 +37,8 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SaveAs1Click(Sender: TObject);
     procedure IdTCPServer1get_nameCommand(ASender: TIdCommand);
+    procedure N3Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -218,6 +220,18 @@ begin
   loc:=ASender.Thread.Connection.ReadLn();
   ASender.Thread.Connection.WriteLn('i have read: ' + loc);
   log('i have read: ' , loc);
+end;
+
+procedure TForm1.N3Click(Sender: TObject);
+begin
+  ShowMessage('Данная программа-сервер связывается с классом клиентов'
+  + ' и следит за событием отсоединения или присоединения мыши к'+
+  ' отслеживаемым ПК.');
+end;
+
+procedure TForm1.N4Click(Sender: TObject);
+begin
+  Close;
 end;
 
 end.
