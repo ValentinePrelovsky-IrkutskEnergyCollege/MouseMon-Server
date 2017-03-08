@@ -134,7 +134,7 @@ begin
   AssignFile(logFile,'log.txt');
   // if (FileExists('log.txt') = false)then  Rewrite(logFile) else Append(logFile);
   Rewrite(logFile);
-  log('Запуск ','сервера ');
+  log('Запуск сервера ','Сервер запущен ');
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -152,13 +152,13 @@ begin
   begin
     Form1.IdTCPServer1.Active:=true;
     Form1.Button3.Caption:='Активен';
-    log('Запуск ','сервера ');
+    log('Запуск сервера ','Сервер запущен ');
   end
  else
   begin
     Form1.IdTCPServer1.Active:=false;
     Form1.Button3.Caption:='Не активен';
-    log('Остановка ','сервера ');
+    log('Остановка сервера ','Сервер остановлен ');
   end;
 end; // e if active
 
@@ -185,7 +185,7 @@ end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  log('Остановка ','сервера ');
+  log('Остановка сервера ','Сервер остановлен ');
   CloseFile(logFile);
 end;
 
