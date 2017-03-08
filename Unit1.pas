@@ -36,6 +36,7 @@ type
     procedure N5Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SaveAs1Click(Sender: TObject);
+    procedure IdTCPServer1get_nameCommand(ASender: TIdCommand);
   private
     { Private declarations }
   public
@@ -80,17 +81,17 @@ end;
 
 procedure TForm1.IdTCPServer1Connect(AThread: TIdPeerThread);
 begin
-  Form1.Caption := 'Соединение установлено';
+  Form1.Caption := 'Connection established';
 end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('Соединение установлено' , getConnectionInfo(ASender));
+  log('Connection established' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('Мышь извлечена' , getConnectionInfo(ASender));
+  log('mouse ejected' , getConnectionInfo(ASender));
 
 end;
 
@@ -98,22 +99,20 @@ procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
   ASender.Thread.Connection.WriteLn(ASender.Thread.Connection.LocalName);
   
-  log('Вставлена мышь' , getConnectionInfo(ASender));
+  log('Mouse inserted' , getConnectionInfo(ASender));
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
 begin
-  log('read pc name: ' , 'Имя сервера ' + idTCPServer1.LocalName);
+  log('read pc name: ' , 'Server name: ' + idTCPServer1.LocalName);
   log((ASender.Thread.Connection.Socket.Binding.IP) ,  ASender.Thread.Connection.Socket.Binding.PeerIP);
-  ASender.Thread.Connection.WriteLn('Имя сервера ' + idTCPServer1.LocalName);
+  ASender.Thread.Connection.WriteLn('Server name: ' + idTCPServer1.LocalName);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   Form1.ListView1.Clear;
 end;
-
-
 
 procedure TForm1.IdTCPServer1get_ipCommand(ASender: TIdCommand);
 begin
@@ -124,12 +123,12 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  Form1.Caption := 'СЕРВЕР';
-  Form1.Button3.Caption:='Активен';
+  Form1.Caption := 'Server';
+  Form1.Button3.Caption:='is active';
   IdTCPServer1.Active:=true;
   AssignFile(logFile,'log.txt');
   if (FileExists('log.txt') = false)then  Rewrite(logFile) else Append(logFile);
-  log('Запуск ','сервера ');
+  log('Starting ','server ');
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -146,14 +145,14 @@ begin
  if (Form1.IdTCPServer1.Active = false)then
   begin
     Form1.IdTCPServer1.Active:=true;
-    Form1.Button3.Caption:='Активен';
-    log('Запуск ','сервера ');
+    Form1.Button3.Caption:='Is active';
+    log('Starting ','server ');
   end
  else
   begin
     Form1.IdTCPServer1.Active:=false;
-    Form1.Button3.Caption:='Не активен';
-    log('Останов ','сервера ');
+    Form1.Button3.Caption:='is not active';
+    log('Stopping ','server ');
   end;
 end; // e if active
 
@@ -180,7 +179,7 @@ end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  log('Останов ','сервера ');
+  log('Stopping ','server ');
   CloseFile(logFile);
 end;
 
@@ -200,6 +199,14 @@ begin
 
     //ShowMessage(ExtractFileExt(path));
   end;// b = true
+end;
+
+procedure TForm1.IdTCPServer1get_nameCommand(ASender: TIdCommand);
+var loc:string;
+begin
+  loc:=ASender.Thread.Connection.ReadLn();
+  ASender.Thread.Connection.WriteLn('i have read: ' + loc);
+  log('i have read: ' , loc);
 end;
 
 end.

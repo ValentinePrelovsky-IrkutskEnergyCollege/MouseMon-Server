@@ -142,6 +142,17 @@ object Form1: TForm1
         ReplyExceptionCode = 0
         ReplyNormal.NumericCode = 0
         Tag = 0
+      end
+      item
+        CmdDelimiter = ' '
+        Command = 'get_name'
+        Disconnect = False
+        Name = 'get_name'
+        OnCommand = IdTCPServer1get_nameCommand
+        ParamDelimiter = ' '
+        ReplyExceptionCode = 0
+        ReplyNormal.NumericCode = 0
+        Tag = 0
       end>
     DefaultPort = 6000
     Greeting.NumericCode = 200
