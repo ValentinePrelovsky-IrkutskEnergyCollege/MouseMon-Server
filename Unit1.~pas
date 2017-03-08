@@ -125,7 +125,8 @@ begin
   Form1.Button3.Caption:='is active';
   IdTCPServer1.Active:=true;
   AssignFile(logFile,'log.txt');
-  if (FileExists('log.txt') = false)then  Rewrite(logFile) else Append(logFile);
+  // if (FileExists('log.txt') = false)then  Rewrite(logFile) else Append(logFile);
+  Rewrite(logFile);
   log('Starting ','server ');
 end;
 
@@ -189,6 +190,12 @@ begin
   if (b = true) then
   begin
     path := Trim(SaveDialog1.FileName);
+    if(ExtractFileName(path) = 'log.txt') then
+    begin
+    ShowMessage('Этот файл уже есть, для сохранения копии выберите другое '+
+      'имя файла или его расположение');
+      Exit;
+    end;
     closeFile(logFile); // close log file temporarily
 
     try
