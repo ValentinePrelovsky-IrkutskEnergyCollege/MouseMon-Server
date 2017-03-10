@@ -53,6 +53,7 @@ type
 var
   Form1: TForm1;
   logFile:TextFile;
+  clientName:string;
 
 implementation
 
@@ -65,7 +66,7 @@ end;
 
 function getConnectionInfo(ASender: TIdCommand):string;
 begin
-  Result := ASender.Thread.Connection.LocalName;
+  Result := ASender.Thread.Connection.Socket.Binding.PeerIP + clientName;
 end;
 procedure log(cmd:string;res:string);
 var ListItem:TListItem;
@@ -91,20 +92,22 @@ end;
 
 procedure TForm1.IdTCPServer1testCommand(ASender: TIdCommand);
 begin
-  log('Соединение установлено' , getConnectionInfo(ASender));
+  //clientName := ASender.Thread.Connection.ReadLn();
+  log('Соединение установлено' , clientName);
 end;
 
 procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
-  log('Мышь извлечена' , getConnectionInfo(ASender));
-
+  //ASender.Thread.Connection.WriteLn(ASender.Thread.Connection.LocalName);
+  log('Мышь извлечена' , clientName);
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
 begin
-  ASender.Thread.Connection.WriteLn(ASender.Thread.Connection.LocalName);
+  //ASender.Thread.Connection.WriteLn(ASender.Thread.Connection.LocalName);
 
-  log('Мышь подключена' , getConnectionInfo(ASender));
+  //log('Мышь подключена' , getConnectionInfo(ASender));
+  log('Мышь подключена' , clientName);
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
@@ -222,9 +225,9 @@ end;
 procedure TForm1.IdTCPServer1get_nameCommand(ASender: TIdCommand);
 var loc:string;
 begin
-  loc:=ASender.Thread.Connection.ReadLn();
-  ASender.Thread.Connection.WriteLn('Я прочёл: ' + loc);
-  log('Я прочёл: ' , loc);
+  clientName:=ASender.Thread.Connection.ReadLn();
+  //ASender.Thread.Connection.WriteLn('Я прочёл: ' + loc);
+  //log('Я прочёл: ' , clientName);
 end;
 
 procedure TForm1.N3Click(Sender: TObject);
