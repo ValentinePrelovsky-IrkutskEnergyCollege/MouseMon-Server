@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, IdBaseComponent, IdComponent, IdTCPServer, StdCtrls,SyncObjs,
-  ComCtrls, Menus,Clipbrd ;
+  ComCtrls, Menus,Clipbrd,MyUtils,SoundPlayer,mmsystem ;
 
 type
   TForm1 = class(TForm)
@@ -54,7 +54,7 @@ var
   Form1: TForm1;
   logFile:TextFile;
   clientName:string;
-
+  soundPlayer: TSoundPlayer;
 implementation
 
 {$R *.dfm}
@@ -100,6 +100,9 @@ procedure TForm1.IdTCPServer1mouseejectCommand(ASender: TIdCommand);
 begin
   //ASender.Thread.Connection.WriteLn(ASender.Thread.Connection.LocalName);
   log('Мышь извлечена' , clientName);
+  try
+    PlaySound(PAnsiChar(soundplayer.path_soundDevOut),0,SND_ASYNC);
+  finally end;
 end;
 
 procedure TForm1.IdTCPServer1mouse_injectCommand(ASender: TIdCommand);
@@ -108,6 +111,9 @@ begin
 
   //log('Мышь подключена' , getConnectionInfo(ASender));
   log('Мышь подключена' , clientName);
+  try
+    PlaySound(PAnsiChar(soundplayer.path_soundDevIn),0,SND_ASYNC);
+  finally end;
 end;
 
 procedure TForm1.IdTCPServer1readPcNameCommand(ASender: TIdCommand);
@@ -118,8 +124,14 @@ begin
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
+var s:string;p:PChar;
 begin
-  Form1.ListView1.Clear;
+//  ShowMessage(getAppPath());
+
+ //ShowMessage(soundPlayer.path_soundDevIn);
+  soundPlayer.playSound(soundplayer.path_soundDevIn,0,SND_ASYNC);
+  s := soundplayer.path_soundDevIn;
+  PlaySound(PAnsiChar(soundplayer.path_soundDevIn),0,SND_ASYNC);
 end;
 
 procedure TForm1.IdTCPServer1get_ipCommand(ASender: TIdCommand);
@@ -138,11 +150,15 @@ begin
   // if (FileExists('log.txt') = false)then  Rewrite(logFile) else Append(logFile);
   Rewrite(logFile);
   log('Запуск сервера ','Сервер запущен ');
+
+  soundPlayer := TSoundPlayer.Create();
+  PlaySound(PAnsiChar(soundplayer.path_soundStart),0,SND_ASYNC);
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   IdTCPServer1.Active:=false;
+  PlaySound(PAnsiChar(soundplayer.path_soundStop),0,SND_ASYNC);
 end;
 
 procedure setServerStatus(b:boolean);
@@ -156,13 +172,17 @@ begin
     Form1.IdTCPServer1.Active:=true;
     Form1.Button3.Caption:='Активен';
     log('Запуск сервера ','Сервер запущен ');
+    PlaySound(PAnsiChar(soundplayer.path_soundStart),0,SND_ASYNC);
   end
  else
   begin
+    PlaySound(PAnsiChar(soundplayer.path_soundStop),0,SND_ASYNC);
     Form1.IdTCPServer1.Active:=false;
     Form1.Button3.Caption:='Не активен';
     log('Остановка сервера ','Сервер остановлен ');
+
   end;
+
 end; // e if active
 
 procedure TForm1.IdTCPServer1Execute(AThread: TIdPeerThread);
